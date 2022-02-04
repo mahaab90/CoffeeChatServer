@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.thinkit.virtualCoffee.server.models.Availability;
 import com.thinkit.virtualCoffee.server.models.Chat;
-import com.thinkit.virtualCoffee.server.models.Thinkiteer;
 import com.thinkit.virtualCoffee.server.repositories.AvailabilityRepository;
 import com.thinkit.virtualCoffee.server.repositories.ThinkiteerRepository;
 
@@ -26,9 +25,9 @@ public class AvailabilityServiceImp implements AvailabilityService {
 	}
 
 	@Override
-	public List<Availability> getAvailabilityByThinkiteer(Thinkiteer thinkiteer) {
+	public List<Availability> getAvailabilityByThinkiteer(String thinkiteer) {
 		// TODO Auto-generated method stub
-		return null;
+		return availabilityRepository.findByThinkiteer(thinkiteerRepository.findById(thinkiteer).get());
 	}
 
 	@Override
@@ -38,16 +37,22 @@ public class AvailabilityServiceImp implements AvailabilityService {
 	}
 
 	@Override
-	public void InsertAvailability(Availability availability, String thinkiteerName) {
+	public void insertAvailability(Availability availability, String thinkiteerName) {
 		// TODO Auto-generated method stub
-
+       thinkiteerRepository.getById(thinkiteerName);
+       thinkiteerRepository.findById(thinkiteerName).map(t->{
+    	   availability.setThinkiteer(t);
+    	   return availabilityRepository.save(availability);
+       })   
+      ;
 	}
+	
 
 	@Override
 	public Chat getChat(int start, int end, int offset, int numberOfParticipants) {
 		// Standerdize Time
-		int start_GMT = (start + offset) % 24;
-		int end_GMT = (end + offset) % 24;
+		int start_GMT = getGmt(start,offset);
+		int end_GMT = getGmt(end,offset);
 		// Get all possible common slots
 		List<Availability> all_availabilities = getAll_availabilities(start_GMT, end_GMT);
         
@@ -83,8 +88,8 @@ public class AvailabilityServiceImp implements AvailabilityService {
 		
 		//adjust time
 		Chat chat=chats.get(0);
-		chat.setEnd((chat.getEnd()-offset)%24);
-		chat.setStart((chat.getStart()-offset)%24);
+		chat.setEnd(getLocalTime(chat.getEnd(),offset));
+		chat.setStart(getLocalTime(chat.getStart(),offset));
 		return chat;
 	}
 
@@ -175,8 +180,8 @@ public class AvailabilityServiceImp implements AvailabilityService {
 		List<Availability> all_availabilities = getAvailabilities();
 
 		all_availabilities.forEach(av -> {
-			int start_av = (av.getStart() + av.getThinkiteer().getOffset()) % 24;
-			int end_av = (av.getEnd() + av.getThinkiteer().getOffset()) % 24;
+			int start_av = getGmt(av.getStart(),av.getThinkiteer().getOffset());
+			int end_av =  getGmt(av.getEnd(),av.getThinkiteer().getOffset());
 
 			// if common slot found, adjust the availability
 			if (start_av < end && end_av > start) {
@@ -200,4 +205,20 @@ public class AvailabilityServiceImp implements AvailabilityService {
 		return availabilityRepository.findAll();
 	}
 
+	public static int getGmt(int time, int offset) {
+		return (time - offset +24) % 24;
+	}
+	public static int getLocalTime(int time, int offset) {
+		return (time + offset +24) % 24;
+	}
+
+	@Override
+	public void updateAvailability(Long id, Availability availability) {
+		// TODO Auto-generated method stub
+		availabilityRepository.findById(id).map(avDB->{
+			avDB.setEnd(availability.getEnd());
+			avDB.setStart(availability.getStart());
+			return availabilityRepository.save(avDB);
+		});
+	}
 }

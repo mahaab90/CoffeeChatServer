@@ -4,13 +4,13 @@ import java.util.List;
 
 import com.thinkit.virtualCoffee.server.models.Availability;
 import com.thinkit.virtualCoffee.server.models.Chat;
-import com.thinkit.virtualCoffee.server.models.Thinkiteer;
 
 public interface AvailabilityService {
-  List<Availability> getAvailabilityByThinkiteer(Thinkiteer thinkiteer);
+  List<Availability> getAvailabilityByThinkiteer(String thinkiteer);
   List<Availability> getAvailabilities();
   //get availabilities with common slots
   List<Availability> getCommonAvailability(Availability availability);
-  void InsertAvailability(Availability availability,String thinkiteerName);
+  void insertAvailability(Availability availability,String thinkiteerName);
+  void updateAvailability(Long id,Availability availability);
   Chat getChat(int start,int end,int offset, int numberOfParticipants);
 }

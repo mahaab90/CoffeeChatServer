@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,8 +28,8 @@ public class AvailibilityController {
 	}
 	
 	@GetMapping({ "/{thinkiteerName}" })
-	public ResponseEntity<List<Availability>> getAvailabilities() {
-		return new ResponseEntity<>(availabilityService.getAvailabilityByThinkiteer(null), HttpStatus.OK);
+	public ResponseEntity<List<Availability>> getAvailabilities(@PathVariable String thinkiteerName) {
+		return new ResponseEntity<>(availabilityService.getAvailabilityByThinkiteer(thinkiteerName), HttpStatus.OK);
 	}
 	
 	@GetMapping({ "/chat" })
@@ -39,9 +40,15 @@ public class AvailibilityController {
 	
 	@PostMapping({ "/{thinkiteerName}/availability" })
 	public ResponseEntity<Availability> saveAvailabiliy(@PathVariable String thinkiteerName, @RequestBody Availability _Availability){
-		availabilityService.InsertAvailability(_Availability, thinkiteerName);
+		availabilityService.insertAvailability(_Availability, thinkiteerName);
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("availability", "/{thinkiteerName}/availability" + _Availability.getId().toString());
 		return new ResponseEntity<>(_Availability, httpHeaders, HttpStatus.CREATED);
+	}
+	
+	@PutMapping({ "/{availabilityId}" })
+	public ResponseEntity<Availability> updateAvailability(@PathVariable Long availabilityId, @RequestBody Availability av){
+		availabilityService.updateAvailability(availabilityId, av);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);	
 	}
 }

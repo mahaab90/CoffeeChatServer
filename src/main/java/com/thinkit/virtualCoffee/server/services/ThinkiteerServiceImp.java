@@ -34,4 +34,10 @@ public class ThinkiteerServiceImp  implements ThinkiteerService{
 		return null;
 	}
 
+	@Override
+	public void addThinkiteer(Thinkiteer thinkiteer) {
+		// TODO Auto-generated method stub
+		thinkiteerRepository.save(thinkiteer);
+	}
+
 }

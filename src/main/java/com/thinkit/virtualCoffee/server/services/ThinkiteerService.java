@@ -9,4 +9,5 @@ public interface ThinkiteerService {
     List<Thinkiteer> getThinkiteers();
     Thinkiteer getThinkiteerByName(String name);
     Thinkiteer getThinkiteerByAvailability(Availability availability);
+    void addThinkiteer(Thinkiteer thinkiteer);
 }
