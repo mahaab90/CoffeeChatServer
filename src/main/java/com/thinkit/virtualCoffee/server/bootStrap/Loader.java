@@ -28,14 +28,16 @@ public class Loader implements CommandLineRunner {
 	private void loadAvailabilities() {
 		// TODO Auto-generated method stub
 		Thinkiteer t1=thinkiteerRepository.getById("Maha");
-		availabilityRepository.save(Availability.builder().start(9).end(11).thinkiteer(t1).build());
+		availabilityRepository.save(Availability.builder().start(9).end(12).thinkiteer(t1).build());
 		availabilityRepository.save(Availability.builder().start(15).end(16).thinkiteer(t1).build());
 		Thinkiteer t2=thinkiteerRepository.getById("Amin");
-		availabilityRepository.save(Availability.builder().start(9).end(12).thinkiteer(t2).build());
+		availabilityRepository.save(Availability.builder().start(7).end(10).thinkiteer(t2).build());
 		Thinkiteer t3=thinkiteerRepository.getById("Wassim");
-		availabilityRepository.save(Availability.builder().start(8).end(10).thinkiteer(t3).build());
+		availabilityRepository.save(Availability.builder().start(8).end(12).thinkiteer(t3).build());
 		Thinkiteer t4=thinkiteerRepository.getById("Fatma");
 		availabilityRepository.save(Availability.builder().start(11).end(12).thinkiteer(t4).build());
+		Thinkiteer t5=thinkiteerRepository.getById("Ali");
+		availabilityRepository.save(Availability.builder().start(7).end(8).thinkiteer(t5).build());
 	
 	}
 
