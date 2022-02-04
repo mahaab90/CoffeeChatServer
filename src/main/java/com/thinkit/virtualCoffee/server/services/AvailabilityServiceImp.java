@@ -3,18 +3,13 @@ package com.thinkit.virtualCoffee.server.services;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.springframework.stereotype.Service;
 
 import com.thinkit.virtualCoffee.server.models.Availability;
 import com.thinkit.virtualCoffee.server.models.Chat;
-import com.thinkit.virtualCoffee.server.models.Availability;
 import com.thinkit.virtualCoffee.server.models.Thinkiteer;
 import com.thinkit.virtualCoffee.server.repositories.AvailabilityRepository;
 import com.thinkit.virtualCoffee.server.repositories.ThinkiteerRepository;
@@ -55,11 +50,14 @@ public class AvailabilityServiceImp implements AvailabilityService {
 		int end_GMT = (end + offset) % 24;
 		// Get all possible common slots
 		List<Availability> all_availabilities = getAll_availabilities(start_GMT, end_GMT);
-
+        
+		//if no available thinkiteers return
+		if(all_availabilities.size() < 1) return null;
+		
 		// Calculate Chat counting the desired number of participants with the largest
 		// slots number
 		List<Chat> chats = countCommonSlot(all_availabilities, start_GMT, end_GMT, numberOfParticipants);
-
+		
 		Chat chat = getChat(chats,offset);
 
 		System.out.println("Chat: ");

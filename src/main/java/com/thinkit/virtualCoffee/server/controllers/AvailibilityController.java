@@ -1,8 +1,6 @@
 package com.thinkit.virtualCoffee.server.controllers;
 
 import java.util.List;
-import java.util.Set;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
